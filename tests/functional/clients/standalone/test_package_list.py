@@ -10,13 +10,15 @@ import json
 #
 
 gem_paths = [
-    pytest.param(path, id=path.split('/')[-1]) for path, _ in gems.pkgs
+    pytest.param(path, id=path.split('/')[-1]) for path, _ in gems.pkgs.items()
 ]
 
 gem_metadata = [
-    pytest.param(path, metadata, id=path.split('/')[-1]) for path, metadata in gems.pkgs
+    pytest.param(path, metadata, id=path.split('/')[-1]) for path, metadata in gems.pkgs.items()
 ]
 
+def assert_nested_dict_equal(a, b):
+    assert json.dumps(a, sort_keys=True, indent=2) == json.dumps(b, sort_keys=True, indent=2)
 
 class TestGemPaths:
 
@@ -33,54 +35,47 @@ class TestGemMetadata:
     def test_has_files(self, analyzed_data, path, metadata):
         result = analyzed_data("lean")
         pkgs = result['image']['imagedata']['analysis_report']['package_list']['pkgs.gems']['base']
-        loaded = json.loads(pkgs.get(path, "{}"))
-        expected = json.loads(metadata)
-        assert loaded['files'] == expected['files']
+        loaded = pkgs.get(path, {})
+        assert_nested_dict_equal(loaded['files'], metadata['files'])
 
     @pytest.mark.parametrize('path,metadata', gem_metadata)
     def test_name(self, analyzed_data, path, metadata):
         result = analyzed_data("lean")
         pkgs = result['image']['imagedata']['analysis_report']['package_list']['pkgs.gems']['base']
-        loaded = json.loads(pkgs.get(path))
-        expected = json.loads(metadata)
-        assert loaded['name'] == expected['name']
+        loaded = pkgs.get(path, {})
+        assert_nested_dict_equal(loaded['name'], metadata['name'])
 
     @pytest.mark.parametrize('path,metadata', gem_metadata)
     def test_lics(self, analyzed_data, path, metadata):
         result = analyzed_data("lean")
         pkgs = result['image']['imagedata']['analysis_report']['package_list']['pkgs.gems']['base']
-        loaded = json.loads(pkgs.get(path))
-        expected = json.loads(metadata)
-        assert loaded['lics'] == expected['lics']
+        loaded = pkgs.get(path, {})
+        assert_nested_dict_equal(loaded['lics'], metadata['lics'])
 
     @pytest.mark.parametrize('path,metadata', gem_metadata)
     def test_versions(self, analyzed_data, path, metadata):
         result = analyzed_data("lean")
         pkgs = result['image']['imagedata']['analysis_report']['package_list']['pkgs.gems']['base']
-        loaded = json.loads(pkgs.get(path))
-        expected = json.loads(metadata)
-        assert loaded['versions'] == expected['versions']
+        loaded = pkgs.get(path, {})
+        assert_nested_dict_equal(loaded['versions'], metadata['versions'])
 
     @pytest.mark.parametrize('path,metadata', gem_metadata)
     def test_latest(self, analyzed_data, path, metadata):
         result = analyzed_data("lean")
         pkgs = result['image']['imagedata']['analysis_report']['package_list']['pkgs.gems']['base']
-        loaded = json.loads(pkgs.get(path))
-        expected = json.loads(metadata)
-        assert loaded['latest'] == expected['latest']
+        loaded = pkgs.get(path, {})
+        assert_nested_dict_equal(loaded['latest'], metadata['latest'])
 
     @pytest.mark.parametrize('path,metadata', gem_metadata)
     def test_origins(self, analyzed_data, path, metadata):
         result = analyzed_data("lean")
         pkgs = result['image']['imagedata']['analysis_report']['package_list']['pkgs.gems']['base']
-        loaded = json.loads(pkgs.get(path))
-        expected = json.loads(metadata)
-        assert loaded['origins'] == expected['origins']
+        loaded = pkgs.get(path, {})
+        assert_nested_dict_equal(loaded['origins'], metadata['origins'])
 
     @pytest.mark.parametrize('path,metadata', gem_metadata)
     def test_sourcepkg(self, analyzed_data, path, metadata):
         result = analyzed_data("lean")
         pkgs = result['image']['imagedata']['analysis_report']['package_list']['pkgs.gems']['base']
-        loaded = json.loads(pkgs.get(path))
-        expected = json.loads(metadata)
-        assert loaded['sourcepkg'] == expected['sourcepkg']
+        loaded = pkgs.get(path, {})
+        assert_nested_dict_equal(loaded['sourcepkg'], metadata['sourcepkg'])
