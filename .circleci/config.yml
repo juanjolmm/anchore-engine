@@ -177,7 +177,6 @@ jobs:
       - checkout
       - <<: *attach_workspace
       - <<: *load_docker_image
-      - <<: *initialize_docker_registry_artifacts
       - run:
           name: Run functional tests
           command: make setup-and-test-functional
