@@ -13,6 +13,7 @@ services:
     image: ${TEST_IMAGE_NAME}
     build:
       dockerfile: Dockerfile.functional
+      context: .
     environment:
       ANCHORE_TEST_DOCKER_REGISTRY_USER: anchore
       ANCHORE_TEST_DOCKER_REGISTRY_PASS: foobar
