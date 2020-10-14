@@ -114,7 +114,7 @@ test-integration: venv setup-test-infra ## Run integration tests (tox)
 	@$(ACTIVATE_VENV) && $(CI_CMD) test-integration
 
 test-functional: venv setup-test-infra ## Run functional tests, assuming compose is running
-	@$(ACTIVATE_VENV) && $(CI_CMD) test-functional
+	@$(ACTIVATE_VENV) && $(CI_CMD) test-functional "${CI_COMPOSE_FILE}"
 
 setup-and-test-functional: venv setup-test-infra ## Stand up/start docker-compose, run functional tests, tear down/stop docker-compose
 	@$(MAKE) compose-up

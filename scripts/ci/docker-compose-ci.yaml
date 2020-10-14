@@ -9,6 +9,21 @@ volumes:
   anchore-scratch: {}
 
 services:
+  job-runner:
+    image: ${TEST_IMAGE_NAME}
+    build:
+      dockerfile: Dockerfile.functional
+    environment:
+      ANCHORE_TEST_DOCKER_REGISTRY_USER: anchore
+      ANCHORE_TEST_DOCKER_REGISTRY_PASS: foobar
+      ANCHORE_TEST_DOCKER_REGISTRY_HOST: docker-registry:5000
+    working_dir: /job-workspace
+    volumes:
+      - ./:/job-workspace
+    depends_on:
+    - engine-api
+    command: ["tail", "-f", "/dev/null"]
+
   # The primary API endpoint service
   engine-api:
     image: ${TEST_IMAGE_NAME}

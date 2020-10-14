@@ -1,0 +1,2 @@
+FROM anchore-engine:dev
+RUN pip3 install --user tox

@@ -169,16 +169,11 @@ jobs:
             - caches/*
 
   functional_tests:
-    docker:
-      - image: circleci/python:3.6
-    resource_class: large
+    machine:
+      image: ubuntu-1604:202007-01
     environment:
       <<: *global_environment_vars
-      ANCHORE_TEST_DOCKER_REGISTRY_USER: anchore
-      ANCHORE_TEST_DOCKER_REGISTRY_PASS: foobar
-      ANCHORE_TEST_DOCKER_REGISTRY_HOST: localhost:5000
     steps:
-      - setup_remote_docker
       - checkout
       - <<: *attach_workspace
       - <<: *load_docker_image
